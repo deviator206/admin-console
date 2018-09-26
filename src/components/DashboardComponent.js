@@ -63,8 +63,8 @@ class DashboardComponent extends Component {
     }
 
     getDashboardContent(ctxInfo) {
-        console.log(ctxInfo);
-        if(ctxInfo && ctxInfo.loginCustomer){
+        const {authenticated = false} = this.props;
+        if(authenticated){
             return <div  className="row">
             <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
             <a className="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Inside-Out</a>
@@ -82,20 +82,20 @@ class DashboardComponent extends Component {
                         <div className="sidebar-sticky">
                             <ul className="nav flex-column">
                                 <li className="nav-item">
-                                <a class={this.state && this.state.selectedMenu === AppConstant.CREATE_USER ? 'active': ''} onClick={()=>{this.sideMenuClick(AppConstant.CREATE_USER)}}> Create User</a>  
+                                <a className={this.state && this.state.selectedMenu === AppConstant.CREATE_USER ? 'active': ''} onClick={()=>{this.sideMenuClick(AppConstant.CREATE_USER)}}> Create User</a>  
                                 </li>
                                 <li className="nav-item">
-                                     <a class={this.state && this.state.selectedMenu === AppConstant.VIEW_ATTENDANCE ? 'active': ''}  onClick= {()=>{this.sideMenuClick(AppConstant.VIEW_ATTENDANCE)}}> Attendance</a>  
+                                     <a className={this.state && this.state.selectedMenu === AppConstant.VIEW_ATTENDANCE ? 'active': ''}  onClick= {()=>{this.sideMenuClick(AppConstant.VIEW_ATTENDANCE)}}> Attendance</a>  
                                     
                                 </li>
                                 <li className="nav-item">
-                                    <a class={this.state && this.state.selectedMenu === AppConstant.VIEW_NOTIFICATION ? 'active': ''}  onClick={()=>{this.sideMenuClick(AppConstant.VIEW_NOTIFICATION)}}> View Notifications</a>  
+                                    <a className={this.state && this.state.selectedMenu === AppConstant.VIEW_NOTIFICATION ? 'active': ''}  onClick={()=>{this.sideMenuClick(AppConstant.VIEW_NOTIFICATION)}}> View Notifications</a>  
                                 </li>
                             </ul>
                         </div>
                     </nav>
             
-                    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                    <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-4">
                         {this.getMainContent()}
                     </main>
             </div>
@@ -107,11 +107,11 @@ class DashboardComponent extends Component {
 
     render() {
       return (
-          <LoginContext>
-                {value =>{
-                    this.getDashboardContent(value)
-                }}
-          </LoginContext>
+            <div>
+                     {this.getDashboardContent()}
+            </div>
+                          
+          
         );
     }
   }

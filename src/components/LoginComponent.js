@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import LoginContext from '../global-ctx/LoginContext';
+import AppService from '../service/AppService';
 
 class LoginComponent extends Component {
 
@@ -7,8 +7,7 @@ class LoginComponent extends Component {
         super(props);
         this.context = context;
         this.onSubmitHandler= this.onSubmitHandler.bind(this);
-        // Gith@9765896417
-
+        this.onLoginSuccessCallback = this.onLoginSuccessCallback.bind(this);
     }
 
     componentWillMount(){
@@ -19,22 +18,21 @@ class LoginComponent extends Component {
         console.log(newProps);
     }
 
-    onSubmitHandler() {
-        this.setState({
-            loginCustomer : {
-                name: 'sandeep',
-                id: 'sammm'
-            }
-        });
+
+    onLoginSuccessCallback (response) {
+        this.props.onLoginSuccess({authenticated:true});
        this.props.history.push("/dashboard")
+    }
+    onSubmitHandler() {
+        AppService.invokeLogin({
+            "name": "morpheus",
+            "job": "leader"
+        },
+        this.onLoginSuccessCallback);
     }
 
     render() {
-        const {loginCustomer={}} = this.state;
-        const value = { loginCustomer };
-        console.log(' YES ..');
-      return (
-          <LoginContext.Provider value={value} >
+        return (
             <div className="container text-center">
                 <div className="form-signin">
                     <img className="mb-4" src="css/img/icons8-login-64.png" alt="" width="72" height="72"></img>
@@ -46,7 +44,6 @@ class LoginComponent extends Component {
                     <button className="btn btn-lg btn-primary btn-block" type="submit" onClick={this.onSubmitHandler}>Sign in</button>
                 </div>
             </div>
-        </LoginContext.Provider>
       );
     }
   }
