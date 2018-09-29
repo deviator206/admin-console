@@ -24,11 +24,24 @@ class LoginComponent extends Component {
        this.props.history.push("/dashboard")
     }
     onSubmitHandler() {
-        AppService.invokeLogin({
-            "name": "morpheus",
-            "job": "leader"
-        },
-        this.onLoginSuccessCallback);
+    	console.log('inputUserName :: '+this.state.inputUserName);
+    	    	console.log('inputPassword :: '+this.state.inputPassword);
+    	    	console.log('URL ::  http://localhost:8080/http://localhost:8080/login/username/'+this.state.inputUserName);
+    	    	 if (!this.state.inputUserName) {
+    	    	      return this.setState({ error: 'Username is required' });
+    	    	    }
+    	
+    	    	    if (!this.state.inputPassword) {
+    	    	      return this.setState({ error: 'Password is required' });
+    	    	    }
+    	    	fetch('http://localhost:8080/http://localhost:8080/login/username/'+this.state.inputUserName)
+    	        .then(response => response.json())
+    	        .then(data => this.setState(data),this.onLoginSuccessCallback);
+    	      /*  AppService.invokeLogin({
+    	            "name": "",
+    	            "job": "leader"
+    	        },
+    	        this.onLoginSuccessCallback);*/
     }
 
     render() {
