@@ -71,7 +71,7 @@ class DashboardComponent extends Component {
     }
 
     getDashboardContent(ctxInfo) {
-        const { authenticated = false } = this.props;
+        const { authenticated = true } = this.props;
         if (authenticated) {
             return <div className="wrapper">
                 <nav id="sidebar">
