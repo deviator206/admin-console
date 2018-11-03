@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 class AppService {
-	static SERVER_HOST = 'http://192.168.0.9:8080/'// https://reqres.in/api/';//192.168.0.9
+	static SERVER_HOST = 'https://reqres.in/api/';//192.168.0.9
 
 	static failureHandler(error) {
 		console.log(error);

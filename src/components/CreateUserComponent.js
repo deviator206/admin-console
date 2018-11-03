@@ -9,7 +9,10 @@ class CreateUserComponent extends Component {
         this.onCamerBegin = this.onCamerBegin.bind(this);
         this.takeSnap = this.takeSnap.bind(this);
         this.onEmployeeCreationSuccessHandler = this.onEmployeeCreationSuccessHandler.bind(this);
+        this.getInfoMessage = this.getInfoMessage.bind(this);
         this.getErrorMessage = this.getErrorMessage.bind(this);
+        this.resetInputFields = this.resetInputFields.bind(this);
+        this.removeCameraAccess =  this.removeCameraAccess.bind(this);
         this.mediaVideStream = null;
 
     }
@@ -24,13 +27,47 @@ class CreateUserComponent extends Component {
     componentDidMount() {
         this.setState({
             showErrorMessage: false,
-            exactErrorMsg: ''
+            exactErrorMsg: '',
+            showInfoMessage : false,
         });
     }
 
     onEmployeeCreationSuccessHandler(resp) {
         this.props.onEmployeeCreationSuccess(resp);
+        this.setState({
+            showInfoMessage: true
+        });
+        this.resetInputFields();
+
     }
+
+    
+    getInfoMessage() {
+        if (this.state && this.state.showErrorMessage) {
+            return (
+                <div  className="noDataContent alert alert-info">
+                    Employee Created Successfully
+
+                </div>
+            );
+        }
+        return null;
+    }
+
+
+    getErrorMessage() {
+        if (this.state && this.state.showErrorMessage) {
+            return (
+                <div  className="noDataContent alert alert-error">
+                    please fill the manadatory params
+
+                </div>
+            );
+        }
+        return null;
+    }
+
+
     getErrorMessage() {
         if (this.state && this.state.showErrorMessage) {
             return (
@@ -42,11 +79,34 @@ class CreateUserComponent extends Component {
         }
         return null;
     }
+
+    resetInputFields() {
+        document.getElementById("EmpName").value = "";
+        document.getElementById("EmpDOB").value = "";
+        document.getElementById("EmpPhone").value = "";
+        document.getElementById("EmpEmailID").value = "";
+        document.getElementById("EmpJoiningDepartment").value = "";
+        document.getElementById("EmpReportingTo").value = "";
+    }
+
+    componentWillUnmount () {
+        this.removeCameraAccess();
+    }
+
+    removeCameraAccess() {
+        if (window && window.currentStream && window.currentStream.getVideoTracks() && window.currentStream.getVideoTracks().length > 0) {
+            window.currentStream.getVideoTracks()[0].stop()
+        }
+    }
+
     onSubmitHandler() {
         if (document.getElementById("EmpPhone").value !== "" && document.getElementById("EmpEmailID").value) {
             this.setState({
                 showErrorMessage: false
             });
+            
+            this.removeCameraAccess();
+           
             const canvas = document.getElementById('canvasComponent');
             const context = canvas.getContext('2d');
             const dataUrl = canvas.toDataURL();
@@ -84,6 +144,7 @@ class CreateUserComponent extends Component {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             // Not adding `{ audio: true }` since we only want video now
             navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
+                window.currentStream = stream;
                 video.src = window.URL.createObjectURL(stream);
                 video.play();
             });
@@ -97,6 +158,9 @@ class CreateUserComponent extends Component {
                 <span className="pageHeaderTxt">Add Employee details</span>
                 <div>
                     {this.getErrorMessage()}
+                </div>
+                <div>
+                    {this.getInfoMessage()}
                 </div>
                 <div className="templateForm">
                     <div className="form-row">
