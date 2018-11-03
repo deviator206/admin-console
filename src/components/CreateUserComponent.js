@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import AppService from '../service/AppService';
 
 class CreateUserComponent extends Component {
 
@@ -7,6 +8,7 @@ class CreateUserComponent extends Component {
         this.onSubmitHandler = this.onSubmitHandler.bind(this);
         this.onCamerBegin = this.onCamerBegin.bind(this);
         this.takeSnap = this.takeSnap.bind(this);
+        this.onEmployeeCreationSuccessHandler = this.onEmployeeCreationSuccessHandler.bind(this);
         this.mediaVideStream = null;
 
     }
@@ -18,24 +20,38 @@ class CreateUserComponent extends Component {
         videoEle.pause();
     }
 
+    onEmployeeCreationSuccessHandler(resp) {
+        this.props.onEmployeeCreationSuccess(resp);
+    }
+
     onSubmitHandler() {
         const canvas = document.getElementById('canvasComponent');
         const context = canvas.getContext('2d');
         const dataUrl = canvas.toDataURL();
+        let genderSelected = "";
+        if (document.getElementById("female").checked) {
+            genderSelected = "female";
+        } else  if (document.getElementById("male").checked) {
+            genderSelected = "male";
+        } else {
+            alert(" GENDER SELECTION MISSED ")
+        }
         const propsToBeSent = {
             "name": document.getElementById("EmpName").value,
-            "gender": "male",
+            "gender": genderSelected,
             "imgBase64": dataUrl,
-            "dob": "2000-01-31",
-            "phone": "1234567890",
-            "email": "abc@abc.com",
+            "dob": document.getElementById("EmpDOB").value,
+            "phone": document.getElementById("EmpPhone").value, 
+            "email": document.getElementById("EmpEmailID").value,
             "empid": 6,
-            "department": "HR",
-            "misc": "KKKKKKKKKK",
-            "picurl": "D:\\neuroImgDB\\xyz_abc.png",
-            "picname": "xyz_abc.png",
+            "department": document.getElementById("EmpJoiningDepartment").value,
+            "misc":document.getElementById("EmpReportingTo").value,
+            "picurl": null,
+            "picname": null,
             "pictemplate": null
         }
+
+        AppService.postCreateUser(propsToBeSent, this.onEmployeeCreationSuccessHandler)
     }
 
     onCamerBegin() {
@@ -60,27 +76,22 @@ class CreateUserComponent extends Component {
                             <label htmlFor="EmpName">Name</label>
                             <input type="text" className="form-control form-control-sm" id="EmpName" placeholder="Name" />
                         </div>
-                        <div className="form-group col-lg-4 col-md-6">
-                            <label htmlFor="EmpDesignation">Designation</label>
-                            <input type="text" className="form-control form-control-sm" id="EmpDesignation" placeholder="Designation" />
-                        </div>
+                       
 
                     </div>
                     <div className="form-row">
                         <div className="form-group col-lg-4 col-md-6">
                             <label htmlFor="EmpDOB">DOB</label>
-                            <div id="datepicker" className="input-group date" data-date-format="mm-dd-yyyy">
-                                <input className="form-control form-control-sm" type="text" readOnly />
-                                <span className="input-group-addon"><i className="fa fa-calendar-alt"></i></span>
-                            </div>
+                            <input className="form-control form-control-sm" id="EmpDOB" type="text"  />
+                            
                         </div>
                         <div className="form-group col-lg-4 col-md-6">
                             <label htmlFor="EmpReportingTo">Misc</label>
                             <input type="text" className="form-control form-control-sm" id="EmpReportingTo" placeholder="Reporting To" />
                         </div>
                         <div className="form-group col-lg-4 col-md-6">
-                            <label htmlFor="EmpJoiningDate">Department</label>
-                            <input type="text" className="form-control form-control-sm" id="EmpJoiningDate" placeholder="Joining date" />
+                            <label htmlFor="EmpJoiningDepartment">Department</label>
+                            <input type="text" className="form-control form-control-sm" id="EmpJoiningDepartment" placeholder="Joining Department" />
                         </div>
                     </div>
                     <div className="form-row">

@@ -46,14 +46,18 @@ class App extends Component {
 // mapStateToProps
 const mapStateToProps = (state, ownProps) => {
   return {
-    authenticated: state && state.authenticated
+    authenticated: state && state.authenticated,
+    logged_in_user: state && state.logged_in_user,
   }
 }
 // mapDispatchToProps
 const mapDispatchToProps = dispatch => {
   return {
-    onLoginSuccess: response => {
-      dispatch({type:ActionType.LOGIN_SUCESS, payload:{response}})
+    onLoginSuccess: respo => {
+      dispatch({type:ActionType.LOGIN_SUCESS, payload:{...respo}});
+    },
+    onEmployeeCreationSuccess : respo => {
+      dispatch({type:ActionType.USER_CREATED, payload:{...respo}})
     }
   }
 }

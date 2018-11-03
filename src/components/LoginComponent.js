@@ -20,13 +20,14 @@ class LoginComponent extends Component {
 
 
     onLoginSuccessCallback (response) {
-        this.props.onLoginSuccess({authenticated:true});
-       this.props.history.push("/dashboard")
+        this.props.onLoginSuccess(response);
+        this.props.history.push("/dashboard")
     }
     onSubmitHandler() {
         AppService.invokeLogin({
-            "name": "morpheus",
-            "job": "leader"
+            "username": document.getElementById("inputUserName").value,
+            "password": document.getElementById("inputPassword").value,
+            "role": "ADMIN"
         },
         this.onLoginSuccessCallback);
     }

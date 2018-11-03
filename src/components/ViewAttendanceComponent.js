@@ -5,7 +5,7 @@ class ViewAttendanceComponent extends Component {
     constructor(props, context) {
         super(props);
         this.onSubmitHandler= this.onSubmitHandler.bind(this);
-        // Gith@9765896417
+        
 
     }
 
@@ -36,7 +36,7 @@ class ViewAttendanceComponent extends Component {
 	                          <input type="text" className="form-control form-control-sm mb-2 mr-sm-2 mt-md-2" id="inlineEmpName" placeholder="Name"/>
 
 								<div id="datepicker" className="input-group date mr-2" data-date-format="mm-dd-yyyy">
-								    <input className="form-control form-control-sm" type="text" readonly />
+								    <input className="form-control form-control-sm" type="text" readOnly />
 								    <span className="input-group-addon"><i className="fa fa-calendar-alt"></i></span>
 					            </div>
 

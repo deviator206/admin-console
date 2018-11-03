@@ -5,7 +5,7 @@ class ViewNotificationComponent extends Component {
     constructor(props, context) {
         super(props);
         this.onSubmitHandler= this.onSubmitHandler.bind(this);
-        // Gith@9765896417
+        
 
     }
 

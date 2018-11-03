@@ -15,7 +15,6 @@ class ViewEmployeeListComponent extends Component {
       return (
         <div >
         <span className="pageHeaderTxt">Employee Search</span>
-        <a className="btn btn-sm btn-primary mb-2 newEmplBtn" href="editEmployee.html">Create New Employee</a>
         <div id="accordion" className="searchSection">
            <div className="card">
               <div className="card-header" id="headingOne">
@@ -33,8 +32,6 @@ class ViewEmployeeListComponent extends Component {
                       <label className="sr-only" htmlFor="inlineEmpName">Name</label>
                       <input type="text" className="form-control form-control-sm mb-2 mr-sm-2" id="inlineEmpName" placeholder="Name" />
 
-                    <label className="sr-only" htmlFor="inlineDesignation">Designation</label>
-                      <input type="text" className="form-control form-control-sm mb-2 mr-sm-2" id="inlineDesignation" placeholder="Designation" />
 
                       <button type="submit" className="btn btn-sm btn-primary mb-2">Submit</button>
                     </form>
