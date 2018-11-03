@@ -28,7 +28,7 @@ class ViewEmployeeListComponent extends Component {
                     <form className="form-inline">
                       <label className="sr-only" htmlFor="inlineEmpID">Employee ID</label>
                       <input type="text" className="form-control form-control-sm mb-2 mr-sm-2" id="inlineEmpID" placeholder="Employee ID" />
-                      <span class="legend mb-2 mr-sm-2" > OR </span>
+                      <span className="legend mb-2 mr-sm-2" > OR </span>
                       <label className="sr-only" htmlFor="inlineEmpName">Name</label>
                       <input type="text" className="form-control form-control-sm mb-2 mr-sm-2" id="inlineEmpName" placeholder="Name" />
 

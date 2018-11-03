@@ -12,9 +12,41 @@ class CreateUserComponent extends Component {
         this.getInfoMessage = this.getInfoMessage.bind(this);
         this.getErrorMessage = this.getErrorMessage.bind(this);
         this.resetInputFields = this.resetInputFields.bind(this);
-        this.removeCameraAccess =  this.removeCameraAccess.bind(this);
+        this.removeCameraAccess = this.removeCameraAccess.bind(this);
+        this.updateStateWithCameraAccess = this.updateStateWithCameraAccess.bind(this);
+        this.updateStateWithoutCameraAccess = this.updateStateWithoutCameraAccess.bind(this);
+        this.webCamDOMElement = this.webCamDOMElement.bind(this);
+        this.encodeImageFileAsURL = this.encodeImageFileAsURL.bind(this);
+        this.fileExplorerDOMElement = this.fileExplorerDOMElement.bind(this);
         this.mediaVideStream = null;
+        window.imgBase64Local = "";
+    }
 
+    fileExplorerDOMElement() {
+        if (this.state && this.state.camPresent) {
+            return (
+
+                <div className="form-group col-lg-4 col-md-6">
+                    <input type="file"  accept="image/*" onChange= {(event) => {this.encodeImageFileAsURL(event.currentTarget)}} />
+                </div>
+            );
+        }
+        return null;
+    }
+
+    webCamDOMElement() {
+        if (this.state && this.state.camPresent) {
+            return (
+
+                <div className="form-group col-lg-4 col-md-6">
+                    <button className="btn btn-sm btn-success" onClick={this.onCamerBegin} >Start Camera</button>
+                    <button className="btn btn-sm btn-success" onClick={this.takeSnap}  >Capture Pic</button>
+                    <video autoPlay id="videoCaptureComponent" width="140" height="180"></video>
+                    <canvas id="canvasComponent" width="140" height="180"></canvas>
+                </div>
+            );
+        }
+        return null;
     }
     takeSnap() {
         const canvas = document.getElementById('canvasComponent');
@@ -24,12 +56,41 @@ class CreateUserComponent extends Component {
         videoEle.pause();
     }
 
-    componentDidMount() {
+    updateStateWithCameraAccess() {
         this.setState({
             showErrorMessage: false,
             exactErrorMsg: '',
-            showInfoMessage : false,
+            showInfoMessage: false,
+            camPresent: true
         });
+    }
+
+    updateStateWithoutCameraAccess() {
+        this.setState({
+            showErrorMessage: false,
+            exactErrorMsg: '',
+            showInfoMessage: false,
+            camPresent: false
+        });
+    }
+
+    encodeImageFileAsURL(element) {
+        const file = element.files[0];
+        const reader = new FileReader();
+        reader.onloadend = function () {
+            window.imgBase64Local = reader.result;
+            console.log('RESULT', reader.result)
+        }
+        reader.readAsDataURL(file);
+    }
+
+    componentDidMount() {
+        window.imgBase64Local = "";
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            this.updateStateWithCameraAccess();
+        } else {
+            this.updateStateWithoutCameraAccess();
+        }
     }
 
     onEmployeeCreationSuccessHandler(resp) {
@@ -38,14 +99,13 @@ class CreateUserComponent extends Component {
             showInfoMessage: true
         });
         this.resetInputFields();
-
     }
 
-    
+
     getInfoMessage() {
         if (this.state && this.state.showErrorMessage) {
             return (
-                <div  className="noDataContent alert alert-info">
+                <div className="noDataContent alert alert-info">
                     Employee Created Successfully
 
                 </div>
@@ -58,7 +118,7 @@ class CreateUserComponent extends Component {
     getErrorMessage() {
         if (this.state && this.state.showErrorMessage) {
             return (
-                <div  className="noDataContent alert alert-error">
+                <div className="noDataContent alert alert-error">
                     please fill the manadatory params
 
                 </div>
@@ -89,7 +149,8 @@ class CreateUserComponent extends Component {
         document.getElementById("EmpReportingTo").value = "";
     }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
+        window.imgBase64Local = "";
         this.removeCameraAccess();
     }
 
@@ -104,12 +165,16 @@ class CreateUserComponent extends Component {
             this.setState({
                 showErrorMessage: false
             });
-            
+
             this.removeCameraAccess();
-           
-            const canvas = document.getElementById('canvasComponent');
-            const context = canvas.getContext('2d');
-            const dataUrl = canvas.toDataURL();
+            let dataUrl = "";
+            if (this.state && this.state.camPresent) {
+                const canvas = document.getElementById('canvasComponent');
+                const context = canvas.getContext('2d');
+                dataUrl = canvas.toDataURL();
+            } else {
+                dataUrl = window.imgBase64Local;
+            }
             let genderSelected = "";
             if (document.getElementById("female").checked) {
                 genderSelected = "female";
@@ -130,7 +195,7 @@ class CreateUserComponent extends Component {
                 "pictemplate": null
             }
             AppService.postCreateUser(propsToBeSent, this.onEmployeeCreationSuccessHandler)
-            
+
         } else {
             this.setState({
                 showErrorMessage: true
@@ -208,13 +273,9 @@ class CreateUserComponent extends Component {
                         </div>
                     </div>
                     <div className="form-row">
-                        <div className="form-group col-lg-4 col-md-6">
-                            <button className="btn btn-sm btn-success" onClick={this.onCamerBegin} >Start Camera</button>
-                            <video autoPlay id="videoCaptureComponent" width="140" height="180"></video>
-                            <canvas id="canvasComponent" width="140" height="180"></canvas>
-
-                            <button className="btn btn-sm btn-success" onClick={this.takeSnap}  >Capture Pic</button>
-                        </div>
+                        {this.webCamDOMElement()}
+                        {this.fileExplorerDOMElement()}
+                        
                     </div>
                     <div className="formfooter">
                         <button type="submit" className="btn btn-sm btn-success" onClick={this.onSubmitHandler} >Save</button>
