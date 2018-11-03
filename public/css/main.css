@@ -1,0 +1,399 @@
+/*
+    DEMO STYLE
+*/
+/*----- CONSTANTS -------*/
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Poppins Light'), local('Poppins-Light'), url(https://fonts.gstatic.com/s/poppins/v5/pxiByp8kv8JHgFVrLDz8Z1xlEA.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Poppins Regular'), local('Poppins-Regular'), url(https://fonts.gstatic.com/s/poppins/v5/pxiEyp8kv8JHgFVrJJfedw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Poppins Medium'), local('Poppins-Medium'), url(https://fonts.gstatic.com/s/poppins/v5/pxiByp8kv8JHgFVrLGT9Z1xlEA.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Poppins SemiBold'), local('Poppins-SemiBold'), url(https://fonts.gstatic.com/s/poppins/v5/pxiByp8kv8JHgFVrLEj6Z1xlEA.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Poppins Bold'), local('Poppins-Bold'), url(https://fonts.gstatic.com/s/poppins/v5/pxiByp8kv8JHgFVrLCz7Z1xlEA.ttf) format('truetype');
+}
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #fafafa;
+}
+p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1em;
+  font-weight: 300;
+  line-height: 1.7em;
+  color: #999;
+}
+a,
+a:hover,
+a:focus {
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+.navbar {
+  padding: 15px 10px;
+  background: #fff;
+  border: none;
+  border-radius: 0;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+.navbar-btn {
+  box-shadow: none;
+  outline: none !important;
+  border: none;
+}
+.line {
+  width: 100%;
+  height: 1px;
+  border-bottom: 1px dashed #ddd;
+  margin: 40px 0;
+}
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+.wrapper {
+  display: flex;
+  width: 100%;
+}
+#sidebar {
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 999;
+  background: #5aa2e2;
+  color: #fff;
+  transition: all 0.3s;
+}
+#sidebar.active {
+  margin-left: -250px;
+}
+#sidebar .sidebar-header {
+  padding: 20px;
+  background: #4d90cc;
+}
+#sidebar ul.components {
+  padding: 20px 0;
+  border-bottom: 1px solid #47748b;
+}
+#sidebar ul.components li.active > ul li a {
+  background: #5898d2;
+  color: #fff;
+}
+#sidebar ul p {
+  color: #fff;
+  padding: 10px;
+}
+#sidebar ul li a {
+  padding: 10px;
+  font-size: 1.1em;
+  display: block;
+}
+#sidebar ul li a:hover {
+  color: #5aa2e2;
+  background: #fff;
+}
+#sidebar ul li.active > a,
+#sidebar ul a[aria-expanded="true"] {
+  color: #fff;
+  background: #4d90cc;
+}
+a[data-toggle="collapse"] {
+  position: relative;
+}
+.dropdown-toggle::after {
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+}
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+#content {
+  width: calc(100% - 250px);
+  padding: 0;
+  min-height: 100vh;
+  transition: all 0.3s;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+#content.active {
+  width: 100%;
+}
+button#sidebarCollapse {
+  display: none;
+}
+.headerActionMenu {
+  display: flex;
+  width: 100%;
+  text-align: right;
+  font-size: 14px;
+  align-items: center;
+  justify-content: space-between;
+}
+.headerActionMenu > div {
+  display: inline-block;
+  margin-right: 15px;
+}
+.headerActionMenu a.nav-link {
+  color: #2c9ee0;
+  font-weight: 500;
+}
+.newEmplBtn {
+  position: absolute;
+  right: 20px;
+  top: 90px;
+}
+.mainSection {
+  padding: 20px;
+}
+.searchSection {
+  box-sizing: border-box;
+}
+.searchSection .card-header {
+  padding: 0;
+  border-bottom: 0;
+}
+.searchSection .card-header button {
+  font-size: 15px;
+  font-weight: 600;
+  color: #4d90cc;
+  text-decoration: none;
+}
+.resultSection {
+  margin: 20px;
+  font-size: 14px;
+}
+.resultSection table {
+  margin-top: 10px;
+}
+.resultSection table th {
+  color: #666;
+  font-weight: 600;
+  font-size: 12px;
+}
+.resultSection table td {
+  color: #424242;
+}
+.resultSection table thead {
+  background: #fff;
+}
+.resultSection table tbody {
+  background: #fff;
+}
+form.templateForm {
+  border: 1px solid #d4d4d4;
+  border-radius: 3px;
+  padding: 30px;
+  margin: 0 auto;
+  font-size: 14px;
+}
+.formfooter {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20px;
+}
+.formfooter button {
+  padding: 5px 20px;
+}
+.noDataContent {
+  margin: 10px;
+  text-align: center;
+  font-size: 14px;
+}
+.boldTxt {
+  font-size: 15px;
+  font-weight: 600;
+  color: #4d90cc;
+}
+span.pageHeaderTxt {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: #737373;
+  font-weight: 500;
+}
+tr.clickable-row {
+  cursor: pointer;
+}
+div#datepicker > input {
+  background: #fff;
+  cursor: default;
+}
+div#datepicker .input-group-addon {
+  background: #dedede;
+  padding: 5px 10px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.loginWrapper {
+  height: 100%;
+  width: 100%;
+  margin: auto;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  /*background-color: @THEME;
+    background-image: linear-gradient(141deg, #252427 0%, #5768ad 51%, #687cd0 75%);*/
+  color: #5496d0;
+}
+.loginWrapper > div {
+  width: 35%;
+}
+.loginWrapper form {
+  border: 1px solid #ccc;
+  padding: 8% 15%;
+  border-top-left-radius: 50px;
+  border-bottom-right-radius: 50px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  background: #fff;
+  color: #333;
+  box-shadow: 2px 3px 8px 1px #d4d4d4;
+}
+.loginTitle {
+  text-align: center;
+  font-size: 35px;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+/* ---- Datepicker ----- */
+.datepicker table {
+  font-family: 'Poppins', sans-serif;
+}
+.datepicker table td.today.day {
+  background: #d6ecf5;
+}
+.datepicker table td.active.day {
+  background: #476fe0 !important;
+}
+.datepicker table td.day {
+  padding: 5px 10px;
+}
+.datepicker table thead > tr:first-child {
+  background: #d9ecfd;
+}
+.datepicker table thead > tr:first-child th {
+  border-radius: 0 !important;
+  padding: 15px 10px;
+  font-weight: 500;
+  font-size: 16px;
+  color: #666;
+}
+.datepicker table thead > tr:last-child th {
+  font-weight: 500;
+  color: #31a2e4;
+}
+.datepicker table td.today.day:hover {
+  background: #eeeeee !important;
+}
+.fa-calendar-alt {
+  font-size: 16px;
+  color: #727a7b;
+}
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+/**
+    Mobile device
+*/
+@media (max-width: 768px) {
+  #sidebar {
+    margin-left: -250px;
+  }
+  #sidebar.active {
+    margin-left: 0;
+  }
+  #content {
+    width: 100%;
+  }
+  #content.active {
+    width: calc(100% - 250px);
+  }
+  #sidebarCollapse span {
+    display: none;
+  }
+  button#sidebarCollapse {
+    display: block;
+  }
+  .searchSection {
+    padding: 0;
+    border: none;
+  }
+  .resultSection {
+    margin: 0;
+    margin-top: 20px;
+  }
+  .noDataContent {
+    margin: 0;
+  }
+  .mainSection {
+    padding: 10px;
+  }
+  span.pageHeaderTxt {
+    margin-bottom: 20px;
+  }
+  form.templateForm {
+    padding: 0;
+    width: 100%;
+    border: none;
+  }
+  .searchSection > fieldset {
+    box-shadow: 2px 3px 8px 0px #cac8c8;
+  }
+  .searchSection form {
+    margin-top: 0;
+  }
+  .newEmplBtn {
+    position: relative;
+    right: 0;
+    top: 0;
+  }
+  .loginWrapper > div {
+    width: 90%;
+  }
+}
+::-moz-placeholder {
+  /* Code for Firefox */
+  color: #999 !important;
+  font-size: 12px;
+}
+::-webkit-input-placeholder {
+  /* Chrome, Edge, Safari and Opera */
+  color: #999 !important;
+  font-size: 12px;
+}
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: #999 !important;
+  font-size: 12px;
+}
+::placeholder {
+  color: #999 !important;
+  font-size: 12px;
+}

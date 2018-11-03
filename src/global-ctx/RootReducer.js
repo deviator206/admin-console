@@ -5,7 +5,8 @@ const RootReducer = (state={}, action) => {
         case ActionType.LOGIN_SUCESS:
         return {
             ...state,
-            authenticated: true
+            authenticated: true,
+            logged_in_user: action.payload
         };
         break;
         default:

@@ -33,16 +33,23 @@ class LoginComponent extends Component {
 
     render() {
         return (
-            <div className="container text-center">
-                <div className="form-signin">
-                    <img className="mb-4" src="css/img/icons8-login-64.png" alt="" width="72" height="72"></img>
-                    <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
-                    <label htmlFor="inputUserName" className="sr-only">User Name</label>
-                    <input type="text" id="inputUserName" className="form-control" placeholder="User Name" required="" autoFocus=""></input>
-                    <label htmlFor="inputPassword" className="sr-only">Password</label>
-                    <input type="password" id="inputPassword" className="form-control" placeholder="Password" required=""></input>
-                    <button className="btn btn-lg btn-primary btn-block" type="submit" onClick={this.onSubmitHandler}>Sign in</button>
-                </div>
+            <div className="loginWrapper">
+                <div>
+                    <div className="loginTitle">
+                    <span>Admin App</span>
+                    </div> 
+                    <form>
+                        <div className="form-group">
+                        <label htmlFor="inputUserName">Username</label>
+                        <input type="text" className="form-control" id="inputUserName" placeholder="Username"></input>
+                        </div>
+                        <div className="form-group">
+                        <label htmlFor="inputPassword">Password</label>
+                        <input type="password" className="form-control" id="inputPassword" placeholder="Password"></input>
+                        </div>
+                        <a className="btn btn-primary btn-block" onClick={this.onSubmitHandler} >Login</a>
+                    </form>
+                </div> 
             </div>
       );
     }

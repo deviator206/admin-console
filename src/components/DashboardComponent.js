@@ -3,7 +3,7 @@ import AppConstant from './comp.const'
 import CreateUserComponent from './CreateUserComponent';
 import ViewAttendanceComponent from './ViewAttendanceComponent';
 import ViewNotificationComponent from './ViewNotificationComponent';
-import LoginContext from '../global-ctx/LoginContext';
+import ViewEmployeeListComponent from './ViewEmployeeListComponent';
 
 
 class DashboardComponent extends Component {
@@ -34,6 +34,9 @@ class DashboardComponent extends Component {
             case AppConstant.VIEW_NOTIFICATION :
             compReturned = <ViewNotificationComponent />;
             break;
+            case AppConstant.VIEW_EMPLOYEE :
+            compReturned = <ViewEmployeeListComponent />;
+            break;
         }
         return compReturned;
     }
@@ -59,48 +62,47 @@ class DashboardComponent extends Component {
                 selectedMenu: AppConstant.VIEW_NOTIFICATION
             });
             break;
+            case AppConstant.VIEW_EMPLOYEE :
+            this.setState({
+                selectedMenu: AppConstant.VIEW_EMPLOYEE
+            });
+            break;
         }
     }
 
     getDashboardContent(ctxInfo) {
         const {authenticated = false} = this.props;
         if(authenticated){
-            return <div  className="row">
-            <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-            <a className="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Inside-Out</a>
-            
-            <ul className="navbar-nav px-3">
-                <li className="nav-item text-nowrap">
-                <a className="nav-link" onClick={this.signOutHandler}>Sign out</a>
-                </li>
-            </ul>
-            </nav>
-            
-            <div className="container-fluid" style={{marginTop: '3em'}}>
-                <div className="row">
-                    <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                        <div className="sidebar-sticky">
-                            <ul className="nav flex-column">
-                                <li className="nav-item">
-                                <a className={this.state && this.state.selectedMenu === AppConstant.CREATE_USER ? 'active': ''} onClick={()=>{this.sideMenuClick(AppConstant.CREATE_USER)}}> Create User</a>  
-                                </li>
-                                <li className="nav-item">
-                                     <a className={this.state && this.state.selectedMenu === AppConstant.VIEW_ATTENDANCE ? 'active': ''}  onClick= {()=>{this.sideMenuClick(AppConstant.VIEW_ATTENDANCE)}}> Attendance</a>  
-                                    
-                                </li>
-                                <li className="nav-item">
-                                    <a className={this.state && this.state.selectedMenu === AppConstant.VIEW_NOTIFICATION ? 'active': ''}  onClick={()=>{this.sideMenuClick(AppConstant.VIEW_NOTIFICATION)}}> View Notifications</a>  
-                                </li>
-                            </ul>
+            return  <div className="wrapper">
+                    <nav id="sidebar">
+                        <div className="sidebar-header">
+                            <h3>Admin App</h3>
                         </div>
+                        <ul className="list-unstyled components">
+                            <li  className={this.state && this.state.selectedMenu === AppConstant.CREATE_USER ? 'active': ''}  ><a  onClick={()=>{this.sideMenuClick(AppConstant.CREATE_USER)}}>Add New Employee</a></li>
+                            <li  className={this.state && this.state.selectedMenu === AppConstant.VIEW_EMPLOYEE ? 'active': ''}  ><a  onClick={()=>{this.sideMenuClick(AppConstant.VIEW_EMPLOYEE)}}>View All Employee</a></li>
+                            <li className={this.state && this.state.selectedMenu === AppConstant.VIEW_ATTENDANCE ? 'active': ''}  ><a onClick= {()=>{this.sideMenuClick(AppConstant.VIEW_ATTENDANCE)}}>Attendance</a></li>
+                            <li className={this.state && this.state.selectedMenu === AppConstant.VIEW_NOTIFICATION ? 'active': ''}  ><a onClick={()=>{this.sideMenuClick(AppConstant.VIEW_NOTIFICATION)}}>View Notification</a></li>
+                        </ul>
                     </nav>
-            
-                    <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-4">
-                        {this.getMainContent()}
-                    </main>
+                    <div id="content">
+                        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                            <div className="container-fluid">
+                                <button type="button" id="sidebarCollapse" className="btn btn-info">
+                                    <i className="fas fa-align-left"></i>
+                                    <span></span>
+                                </button>
+                                <div className="headerActionMenu">
+                                    <div>Welcome User!</div>
+                                    <div><a className="nav-link" onClick={this.signOutHandler}>Logout</a></div>
+                                </div>
+                            </div>
+                        </nav>
+                        <div className="mainSection">
+                            {this.getMainContent()}
+                        </div>
+                    </div>
             </div>
-            </div>
-            </div>;
         }
         return null;
     }

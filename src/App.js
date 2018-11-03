@@ -34,7 +34,7 @@ class App extends Component {
       <Router>
          <div>
             <Route exact path="/" render={(props) => <LoginComponent {...props} {...this.props} />} />
-           <Route exact path="/dashboard" render={(props) => <DashboardComponent {...props} {...this.props} />}  />
+           <Route  path="/dashboard" render={(props) => <DashboardComponent {...props} {...this.props} />}  />
          </div>
       </Router>
     );
