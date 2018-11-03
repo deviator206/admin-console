@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 class AppService {
-	static SERVER_HOST = 'https://reqres.in/api/';
+	static SERVER_HOST = 'http://192.168.0.9:8080/'// https://reqres.in/api/';//192.168.0.9
 
 	static failureHandler(error) {
 		console.log(error);
@@ -12,16 +12,17 @@ class AppService {
 	}
 
 	static invokeLogin(data, successHandler, failureHandler = this.failureHandler) {
-		axios.post(AppService.getServerURL() + 'users/', data)
+		axios.post(AppService.getServerURL() + 'login/', data)
 			.then(function (response) {
-				// successHandler(response.data);
-				
-				successHandler({
+				successHandler(response.data);
+				 /*
+				 successHandler({
 					"id": 3,
 					"username": "admin",
 					"password": "admin123",
 					"role": "ADMIN"
 				});
+				*/
 
 			})
 			.catch(function (error) {
@@ -54,7 +55,7 @@ class AppService {
 
 
 	static postCreateUser(data, successHandler, failureHandler = this.failureHandler) {
-		axios.post(AppService.getServerURL() + 'user/users', data)
+		axios.post(AppService.getServerURL() + 'user', data)
 			.then(function (response) {
 				// successHandler(response.data);
 				successHandler({

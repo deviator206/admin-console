@@ -9,6 +9,7 @@ class CreateUserComponent extends Component {
         this.onCamerBegin = this.onCamerBegin.bind(this);
         this.takeSnap = this.takeSnap.bind(this);
         this.onEmployeeCreationSuccessHandler = this.onEmployeeCreationSuccessHandler.bind(this);
+        this.getErrorMessage = this.getErrorMessage.bind(this);
         this.mediaVideStream = null;
 
     }
@@ -20,38 +21,62 @@ class CreateUserComponent extends Component {
         videoEle.pause();
     }
 
+    componentDidMount() {
+        this.setState({
+            showErrorMessage: false,
+            exactErrorMsg: ''
+        });
+    }
+
     onEmployeeCreationSuccessHandler(resp) {
         this.props.onEmployeeCreationSuccess(resp);
     }
+    getErrorMessage() {
+        if (this.state && this.state.showErrorMessage) {
+            return (
+                <div>
+                    please fill the manadatory params
 
+                </div>
+            );
+        }
+        return null;
+    }
     onSubmitHandler() {
-        const canvas = document.getElementById('canvasComponent');
-        const context = canvas.getContext('2d');
-        const dataUrl = canvas.toDataURL();
-        let genderSelected = "";
-        if (document.getElementById("female").checked) {
-            genderSelected = "female";
-        } else  if (document.getElementById("male").checked) {
-            genderSelected = "male";
+        if (document.getElementById("EmpPhone").value !== "" && document.getElementById("EmpEmailID").value) {
+            this.setState({
+                showErrorMessage: false
+            });
+            const canvas = document.getElementById('canvasComponent');
+            const context = canvas.getContext('2d');
+            const dataUrl = canvas.toDataURL();
+            let genderSelected = "";
+            if (document.getElementById("female").checked) {
+                genderSelected = "female";
+            } else if (document.getElementById("male").checked) {
+                genderSelected = "male";
+            }
+            const propsToBeSent = {
+                "name": document.getElementById("EmpName").value,
+                "gender": genderSelected,
+                "imgBase64": dataUrl,
+                "dob": document.getElementById("EmpDOB").value,
+                "phone": document.getElementById("EmpPhone").value,
+                "email": document.getElementById("EmpEmailID").value,
+                "department": document.getElementById("EmpJoiningDepartment").value,
+                "misc": document.getElementById("EmpReportingTo").value,
+                "picurl": null,
+                "picname": null,
+                "pictemplate": null
+            }
+            AppService.postCreateUser(propsToBeSent, this.onEmployeeCreationSuccessHandler)
+            
         } else {
-            alert(" GENDER SELECTION MISSED ")
-        }
-        const propsToBeSent = {
-            "name": document.getElementById("EmpName").value,
-            "gender": genderSelected,
-            "imgBase64": dataUrl,
-            "dob": document.getElementById("EmpDOB").value,
-            "phone": document.getElementById("EmpPhone").value, 
-            "email": document.getElementById("EmpEmailID").value,
-            "empid": 6,
-            "department": document.getElementById("EmpJoiningDepartment").value,
-            "misc":document.getElementById("EmpReportingTo").value,
-            "picurl": null,
-            "picname": null,
-            "pictemplate": null
+            this.setState({
+                showErrorMessage: true
+            });
         }
 
-        AppService.postCreateUser(propsToBeSent, this.onEmployeeCreationSuccessHandler)
     }
 
     onCamerBegin() {
@@ -66,9 +91,13 @@ class CreateUserComponent extends Component {
     }
 
     render() {
+
         return (
             <div>
                 <span className="pageHeaderTxt">Add Employee details</span>
+                <div>
+                    {this.getErrorMessage()}
+                </div>
                 <div className="templateForm">
                     <div className="form-row">
 
@@ -76,14 +105,14 @@ class CreateUserComponent extends Component {
                             <label htmlFor="EmpName">Name</label>
                             <input type="text" className="form-control form-control-sm" id="EmpName" placeholder="Name" />
                         </div>
-                       
+
 
                     </div>
                     <div className="form-row">
                         <div className="form-group col-lg-4 col-md-6">
                             <label htmlFor="EmpDOB">DOB</label>
-                            <input className="form-control form-control-sm" id="EmpDOB" type="text"  />
-                            
+                            <input className="form-control form-control-sm" id="EmpDOB" type="text" />
+
                         </div>
                         <div className="form-group col-lg-4 col-md-6">
                             <label htmlFor="EmpReportingTo">Misc</label>
@@ -117,8 +146,8 @@ class CreateUserComponent extends Component {
                     <div className="form-row">
                         <div className="form-group col-lg-4 col-md-6">
                             <button className="btn btn-sm btn-success" onClick={this.onCamerBegin} >Start Camera</button>
-                            <video autoPlay id="videoCaptureComponent"></video>
-                            <canvas id="canvasComponent" width="640" height="480"></canvas>
+                            <video autoPlay id="videoCaptureComponent" width="140" height="180"></video>
+                            <canvas id="canvasComponent" width="140" height="180"></canvas>
 
                             <button className="btn btn-sm btn-success" onClick={this.takeSnap}  >Capture Pic</button>
                         </div>
