@@ -1,14 +1,30 @@
 import React, { Component } from 'react';
+import AppService from '../service/AppService';
 
 class ViewEmployeeListComponent extends Component {
 
     constructor(props, context) {
         super(props);
-        this.onSubmitHandler= this.onSubmitHandler.bind(this);
+        this.onSearchHandler= this.onSearchHandler.bind(this);
     }
 
-    onSubmitHandler() {
-        this.props.history.push("/dashboard")
+    componentDidMount() {
+      
+    }
+
+    onEmployeeFetchedSuccessHandler(response) {
+      console.log("emp Fetch");
+    }
+
+    onSearchHandler() {
+      const empID  = document.getElementById("inlineEmpIDInput").value;
+      const empName  = document.getElementById("inlineEmpNameInput").value;
+      if (empID !== "" ) {
+        AppService.getEmployeesById({searchType:"emp_id",searchText:empID}, this.onEmployeeFetchedSuccessHandler)
+      } 
+      else if (empName !== "" ) {
+        AppService.getEmployeesByName({searchType:"emp_name",searchText:empName}, this.onEmployeeFetchedSuccessHandler)
+      }
     }
 
     render() {
@@ -25,17 +41,17 @@ class ViewEmployeeListComponent extends Component {
 
                <div id="collapseSearch" className="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                  <div className="card-body">
-                    <form className="form-inline">
-                      <label className="sr-only" htmlFor="inlineEmpID">Employee ID</label>
-                      <input type="text" className="form-control form-control-sm mb-2 mr-sm-2" id="inlineEmpID" placeholder="Employee ID" />
+                    <div className="form-inline">
+                      <label className="sr-only" htmlFor="inlineEmpIDInput">Employee ID</label>
+                      <input type="text" className="form-control form-control-sm mb-2 mr-sm-2" id="inlineEmpIDInput" placeholder="Employee ID" />
                       <span className="legend mb-2 mr-sm-2" > OR </span>
-                      <label className="sr-only" htmlFor="inlineEmpName">Name</label>
-                      <input type="text" className="form-control form-control-sm mb-2 mr-sm-2" id="inlineEmpName" placeholder="Name" />
+                      <label className="sr-only" htmlFor="inlineEmpNameInput">Name</label>
+                      <input type="text" className="form-control form-control-sm mb-2 mr-sm-2" id="inlineEmpNameInput" placeholder="Name" />
 
                       
 
-                      <button type="submit" className="btn btn-sm btn-primary mb-2">Search</button>
-                    </form>
+                      <button type="submit" className="btn btn-sm btn-primary mb-2" onClick = { this.onSearchHandler}>Search</button>
+                    </div>
                </div>
              </div>
            </div>
