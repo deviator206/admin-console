@@ -6,14 +6,55 @@ class ViewEmployeeListComponent extends Component {
     constructor(props, context) {
         super(props);
         this.onSearchHandler= this.onSearchHandler.bind(this);
+        this.renderEmployeeList = this.renderEmployeeList.bind(this);
+        this.renderEmptyEmpList = this.renderEmptyEmpList.bind(this);
+        this.onEmployeeFetchedSuccessHandler = this.onEmployeeFetchedSuccessHandler.bind(this);
     }
 
-    componentDidMount() {
-      
-    }
+    componentWillMount(){
+      this.setState({});
+  }
 
     onEmployeeFetchedSuccessHandler(response) {
-      console.log("emp Fetch");
+      this.setState({
+        empList: response
+      });
+    }
+
+    renderEmptyEmpList() {
+      const {empList} = this.state;
+      if(empList && empList.length === 0) {
+        return (
+        <div className="noDataContent alert alert-info">
+        No records to display!
+        </div> )
+      }
+      return null;
+    }
+
+    renderEmployeeList() {
+      const {empList =[]} = this.state;
+      let renderableEmpList =[];
+      renderableEmpList = empList.map(function (singleEmp) {
+        let dateOfBirth = "";
+        if (singleEmp && singleEmp.dob){
+          const dateIn = new Date(singleEmp.dob);
+          dateOfBirth = dateIn.getUTCDay() +'/'+dateIn.getUTCMonth()+'/'+dateIn.getUTCFullYear(); 
+        }
+        return (
+              <tr data-empID={singleEmp.empid}>
+                 <th scope="row">{singleEmp.empid}</th>
+                 <td>{singleEmp.name}</td>
+                 <td>{singleEmp.email}</td>
+                 <td>{singleEmp.phone}</td>
+                 <td>{dateOfBirth}</td>
+                 <td>{singleEmp.department}</td>
+                 <td>{singleEmp.gender}</td>
+                 <td>{singleEmp.picurl}</td>
+              </tr>
+        )
+      });
+      return renderableEmpList;
     }
 
     onSearchHandler() {
@@ -61,74 +102,24 @@ class ViewEmployeeListComponent extends Component {
            <table className="table table-sm table-hover">
              <thead>
                <tr>
+
                  <th scope="col">Emp ID</th>
                  <th scope="col">Name</th>
-                 <th scope="col">Designation</th>
-                 <th scope="col">Reporting To</th>
-                 <th scope="col">Joining date</th>
-                 <th scope="col">DOB</th>
-                 <th scope="col">Gender</th>
-                 <th scope="col">Email</th>
                  <th scope="col">Phone</th>
-                 <th scope="col">Status</th>
+                 <th scope="col">Phone</th>
+                 <th scope="col">Date of Birth</th>
+                 <th scope="col">Department</th>
+                 <th scope="col">Gender</th>
+                 <th scope="col">Pic</th>
                </tr>
              </thead>
              <tbody>
-               <tr>
-                 <th scope="row">1</th>
-                 <td>Sandeep</td>
-                 <td>Sr. Software Engineer</td>
-                 <td>Shailesh</td>
-                 <td>6 June, 2014</td>
-                 <td>12 June, 1986</td>
-                 <td>Male</td>
-                 <td>sandeep.b@gmail.com</td>
-                 <td>9009282636</td>
-                 <td><span className="badge badge-success">Active</span></td>
-               </tr>
-               <tr>
-                 <th scope="row">2</th>
-                 <td>Jacob</td>
-                 <td>Sr. Software Engineer</td>
-                 <td>Srinivas</td>
-                 <td>24 Oct, 2016</td>
-                 <td>07 April, 1979</td>
-                 <td>Male</td>
-                 <td>jacob.d@gmail.com</td>
-                 <td>9037545999</td>
-                 <td><span className="badge badge-danger">Non Active</span></td>
-               </tr>
-               <tr>
-                 <th scope="row">2</th>
-                 <td>Shubhangi</td>
-                 <td>Sr. Software Engineer</td>
-                 <td>Sandeep</td>
-                 <td>16 Jul, 2015</td>
-                 <td>3 Nov, 1986</td>
-                 <td>Female</td>
-                 <td>shubhangi.g@gmail.com</td>
-                 <td>9087123456</td>
-                 <td><span className="badge badge-success">Active</span></td>
-               </tr>
-               <tr>
-                 <th scope="row">3</th>
-                 <td>John</td>
-                 <td>Software Engineer</td>
-                 <td>Sandeep</td>
-                 <td>12 Feb, 2017</td>
-                 <td>30 Dec, 1992</td>
-                 <td>Male</td>
-                 <td>john.m@gmail.com</td>
-                 <td>9876034527</td>
-                 <td><span className="badge badge-success">Active</span></td>
-               </tr>
-             </tbody>
+               {this.renderEmployeeList()}
+              </tbody>
            </table>
         </div>
 
-        <div className="noDataContent alert alert-info">
-           No records to display!
-        </div>  
+          {this.renderEmptyEmpList()}
     </div>
       );
     }
