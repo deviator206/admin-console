@@ -42,7 +42,7 @@ class ViewEmployeeListComponent extends Component {
           dateOfBirth = dateIn.getUTCDay() +'/'+dateIn.getUTCMonth()+'/'+dateIn.getUTCFullYear(); 
         }
         return (
-              <tr data-empID={singleEmp.empid}>
+              <tr key={singleEmp.id} data-imp={singleEmp.empid}>
                  <th scope="row">{singleEmp.empid}</th>
                  <td>{singleEmp.name}</td>
                  <td>{singleEmp.email}</td>
