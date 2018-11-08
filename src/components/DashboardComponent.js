@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import AppConstant from './comp.const'
 import CreateUserComponent from './CreateUserComponent';
+import CreateVisitorComponent from './CreateVisitorComponent';
 import ViewAttendanceComponent from './ViewAttendanceComponent';
 import ViewNotificationComponent from './ViewNotificationComponent';
 import ViewEmployeeListComponent from './ViewEmployeeListComponent';
+import ViewAttendanceSingleComponent from './ViewAttendanceSingleComponent';
+import ViewVisitorListComponent from './ViewVisitorListComponent';
 
 
 class DashboardComponent extends Component {
@@ -28,7 +31,7 @@ class DashboardComponent extends Component {
             case AppConstant.CREATE_USER:
                 compReturned = <CreateUserComponent />;
                 break;
-            case AppConstant.VIEW_ATTENDANCE:
+            case AppConstant.ATTENDANCE_ALL:
                 compReturned = <ViewAttendanceComponent />;
                 break;
             case AppConstant.VIEW_NOTIFICATION:
@@ -37,6 +40,16 @@ class DashboardComponent extends Component {
             case AppConstant.VIEW_EMPLOYEE:
                 compReturned = <ViewEmployeeListComponent />;
                 break;
+            case AppConstant.CREATE_VISITOR:
+                compReturned = <CreateVisitorComponent />;
+                break;
+            case AppConstant.ATTENDANCE_SINGLE:
+                compReturned = <ViewAttendanceSingleComponent />;
+                break;
+            case AppConstant.VIEW_VISITOR:
+                compReturned = <ViewVisitorListComponent />;
+                break;
+                
         }
         return compReturned;
     }
@@ -52,9 +65,9 @@ class DashboardComponent extends Component {
                     selectedMenu: AppConstant.CREATE_USER
                 });
                 break;
-            case AppConstant.VIEW_ATTENDANCE:
+            case AppConstant.ATTENDANCE_ALL:
                 this.setState({
-                    selectedMenu: AppConstant.VIEW_ATTENDANCE
+                    selectedMenu: AppConstant.ATTENDANCE_ALL
                 });
                 break;
             case AppConstant.VIEW_NOTIFICATION:
@@ -67,6 +80,22 @@ class DashboardComponent extends Component {
                     selectedMenu: AppConstant.VIEW_EMPLOYEE
                 });
                 break;
+
+            case AppConstant.ATTENDANCE_SINGLE:
+                this.setState({
+                    selectedMenu: AppConstant.ATTENDANCE_SINGLE
+                });
+                break;
+            case AppConstant.CREATE_VISITOR:
+                this.setState({
+                    selectedMenu: AppConstant.CREATE_VISITOR
+                });
+                break;
+            case AppConstant.VIEW_VISITOR:
+                this.setState({
+                    selectedMenu: AppConstant.VIEW_VISITOR
+                });
+                break;    
         }
     }
 
@@ -81,8 +110,11 @@ class DashboardComponent extends Component {
                     <ul className="list-unstyled components">
                         <li className={this.state && this.state.selectedMenu === AppConstant.CREATE_USER ? 'active' : ''}  ><a onClick={() => { this.sideMenuClick(AppConstant.CREATE_USER) }}>Add New Employee</a></li>
                         <li className={this.state && this.state.selectedMenu === AppConstant.VIEW_EMPLOYEE ? 'active' : ''}  ><a onClick={() => { this.sideMenuClick(AppConstant.VIEW_EMPLOYEE) }}>View All Employee</a></li>
-                        <li className={this.state && this.state.selectedMenu === AppConstant.VIEW_ATTENDANCE ? 'active' : ''}  ><a onClick={() => { this.sideMenuClick(AppConstant.VIEW_ATTENDANCE) }}>Attendance</a></li>
-                        <li className={this.state && this.state.selectedMenu === AppConstant.VIEW_NOTIFICATION ? 'active' : ''}  ><a onClick={() => { this.sideMenuClick(AppConstant.VIEW_NOTIFICATION) }}>View Notification</a></li>
+                        <li className={this.state && this.state.selectedMenu === AppConstant.ATTENDANCE_ALL ? 'active' : ''}  ><a onClick={() => { this.sideMenuClick(AppConstant.ATTENDANCE_ALL) }}>Attendance - All </a></li>
+                        <li className={this.state && this.state.selectedMenu === AppConstant.ATTENDANCE_SINGLE ? 'active' : ''}  ><a onClick={() => { this.sideMenuClick(AppConstant.ATTENDANCE_SINGLE) }}>Attendance - Single </a></li>
+                        <li className={this.state && this.state.selectedMenu === AppConstant.CREATE_VISITOR ? 'active' : ''}  ><a onClick={() => { this.sideMenuClick(AppConstant.CREATE_VISITOR) }}>Create Visitor </a></li>
+                        <li className={this.state && this.state.selectedMenu === AppConstant.VIEW_VISITOR ? 'active' : ''}  ><a onClick={() => { this.sideMenuClick(AppConstant.VIEW_VISITOR) }}>View All Visitor </a></li>
+                        <li className={this.state && this.state.selectedMenu === AppConstant.VIEW_NOTIFICATION ? 'active' : ''}  ><a onClick={() => { this.sideMenuClick(AppConstant.VIEW_NOTIFICATION) }}>Notification</a></li>
                     </ul>
                 </nav>
                 <div id="content">
