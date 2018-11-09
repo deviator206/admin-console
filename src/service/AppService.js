@@ -31,13 +31,40 @@ class AppService {
 		
 	}
 
+	static getAttendanceForRange(data, successHandler, failureHandler = this.failureHandler) {
+		if(this.USE_MOCK) {
+			successHandler(attendanceList);
+		} else {
+			axios.get(AppService.getServerURL() + 'attendance/fromto?from='+data.startDate+'&to='+data.endDate)
+			.then(function (response) {
+				successHandler(response.data);
+			})
+			.catch(function (error) {
+				failureHandler(error);
+			});
+		}
+	}
+
+	static getAttendanceForSpecificDate(data, successHandler, failureHandler = this.failureHandler) {
+		if(this.USE_MOCK) {
+			successHandler(attendanceList);
+		} else {
+			axios.get(AppService.getServerURL() + 'attendance/fordate/'+data.specificDate)
+			.then(function (response) {
+				successHandler(response.data);
+			})
+			.catch(function (error) {
+				failureHandler(error);
+			});
+		}
+	}
 
 	static getAttendanceForMonth(data, successHandler, failureHandler = this.failureHandler) {
 		if(this.USE_MOCK) {
 			successHandler(attendanceList);
 		}
 		else {
-			axios.get(AppService.getServerURL() + 'attendance/formonth/', { params: data })
+			axios.get(AppService.getServerURL() + 'attendance/formonth/'+data.month)
 			.then(function (response) {
 				successHandler(response.data);
 			})
@@ -92,6 +119,8 @@ class AppService {
 		}
 		
 	}
+
+	
 
 	
 
