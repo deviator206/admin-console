@@ -6,7 +6,7 @@ const attendanceList = [
         "trackedDate": "2018-10-05T17:32:13.000+0000",
         "in_time": "9:00pm",
         "out_time": "9:00am",
-        "user_name": "anonymous01.png"
+        "pic_url": "anonymous01.png"
     },
     {
         "id":2,
@@ -15,7 +15,7 @@ const attendanceList = [
         "trackedDate": "2018-10-05T17:32:13.000+0000",
         "in_time": "9:00pm",
         "out_time": "9:00am",
-        "user_name": "anonymous02.png"
+        "pic_url": "anonymous02.png"
     }
 ]
 

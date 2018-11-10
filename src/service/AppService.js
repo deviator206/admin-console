@@ -2,6 +2,7 @@ import axios from 'axios';
 import empList from './mocks/empList';
 import empCreation from './mocks/empCreation';
 import attendanceList from './mocks/attendanceList';
+import attendanceListSingle from './mocks/attendanceListSingle';
 import loginResponse from './mocks/loginResponse';
 
 class AppService {
@@ -75,6 +76,51 @@ class AppService {
 		
 	}
 
+
+
+	static getAttendanceForRangeForSinglePerson(data, successHandler, failureHandler = this.failureHandler) {
+		if(this.USE_MOCK) {
+			successHandler(attendanceListSingle);
+		} else {
+			axios.get(AppService.getServerURL() + 'attendance/'+data.searchText+'/fromto?from='+data.startDate+'&to='+data.endDate)
+			.then(function (response) {
+				successHandler(response.data);
+			})
+			.catch(function (error) {
+				failureHandler(error);
+			});
+		}
+	}
+
+	static getAttendanceForSpecificDateForSinglePerson(data, successHandler, failureHandler = this.failureHandler) {
+		if(this.USE_MOCK) {
+			successHandler(attendanceListSingle);
+		} else {
+			axios.get(AppService.getServerURL() + 'attendance/'+data.searchText+'/fordate/'+data.specificDate)
+			.then(function (response) {
+				successHandler(response.data);
+			})
+			.catch(function (error) {
+				failureHandler(error);
+			});
+		}
+	}
+
+	static getAttendanceForMonthForSinglePerson(data, successHandler, failureHandler = this.failureHandler) {
+		if(this.USE_MOCK) {
+			successHandler(attendanceListSingle);
+		}
+		else {
+			axios.get(AppService.getServerURL() + 'attendance/'+data.searchText+'/formonth/'+data.month)
+			.then(function (response) {
+				successHandler(response.data);
+			})
+			.catch(function (error) {
+				failureHandler(error);
+			});
+		}
+		
+	}
 
 	static postCreateUser(data, successHandler, failureHandler = this.failureHandler) {
 		if(this.USE_MOCK) {
