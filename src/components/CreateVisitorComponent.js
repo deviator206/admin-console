@@ -49,10 +49,13 @@ class CreateVisitorComponent extends Component {
         return null;
     }
     takeSnap() {
+        this.setState({
+            imgCapturedMethod: 'SNAP_CLICKED'
+        });
         const canvas = document.getElementById('canvasComponent');
         const context = canvas.getContext('2d');
         const videoEle = document.getElementById('videoCaptureComponent');
-        context.drawImage(videoEle, 0, 0, 640, 480);
+        context.drawImage(videoEle, 0, 0,canvas.width, canvas.height);
         videoEle.pause();
     }
 
@@ -77,9 +80,13 @@ class CreateVisitorComponent extends Component {
     encodeImageFileAsURL(element) {
         const file = element.files[0];
         const reader = new FileReader();
+        this.setState({
+            imgCapturedMethod: 'SNAP_UPLOADED'
+        });
         reader.onloadend = function () {
             window.imgBase64Local = reader.result;
-            console.log('RESULT', reader.result)
+            
+            
         }
         reader.readAsDataURL(file);
     }
@@ -94,16 +101,15 @@ class CreateVisitorComponent extends Component {
     }
 
     onEmployeeCreationSuccessHandler(resp) {
-        this.props.onEmployeeCreationSuccess(resp);
+        this.resetInputFields();
         this.setState({
             showInfoMessage: true
         });
-        this.resetInputFields();
     }
 
 
     getInfoMessage() {
-        if (this.state && this.state.showErrorMessage) {
+        if (this.state && this.state.showInfoMessage) {
             return (
                 <div className="noDataContent alert alert-info">
                     Employee Created Successfully
@@ -118,7 +124,7 @@ class CreateVisitorComponent extends Component {
     getErrorMessage() {
         if (this.state && this.state.showErrorMessage) {
             return (
-                <div className="noDataContent alert alert-error">
+                <div className="noDataContent alert alert-info">
                     please fill the manadatory params
 
                 </div>
@@ -142,16 +148,31 @@ class CreateVisitorComponent extends Component {
 
     resetInputFields() {
         document.getElementById("EmpName").value = "";
-        document.getElementById("EmpDOB").value = "";
         document.getElementById("EmpPhone").value = "";
         document.getElementById("EmpEmailID").value = "";
-        document.getElementById("EmpJoiningDepartment").value = "";
-        document.getElementById("EmpReportingTo").value = "";
+        document.getElementById("whomToMeet").value = "";
+        document.getElementById("visitorPurpose").value = "";
+        document.getElementById("identificationDoc").value = "";
+        const videoEle = document.getElementById('videoCaptureComponent');
+        const canvas = document.getElementById('canvasComponent');
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        videoEle.src ="";
+        this.setState({
+            imgCapturedMethod: 'NONE'
+        });
     }
-
+    componentWillMount() {
+        this.setState({
+            imgCapturedMethod: 'NONE'
+        });
+    }
     componentWillUnmount() {
         window.imgBase64Local = "";
         this.removeCameraAccess();
+        this.setState({
+            imgCapturedMethod: 'NONE'
+        });
     }
 
     removeCameraAccess() {
@@ -161,7 +182,16 @@ class CreateVisitorComponent extends Component {
     }
 
     onSubmitHandler() {
-        if (document.getElementById("EmpPhone").value !== "" && document.getElementById("EmpEmailID").value) {
+        let validInfo = "";
+        if (document.getElementById("EmpPhone").value !== ""){
+            validInfo = document.getElementById("EmpPhone").value;
+        } else if(document.getElementById("EmpEmailID").value !== ""){
+            validInfo = document.getElementById("EmpEmailID").value;
+        }
+
+        const {imgCapturedMethod} = this.state;
+
+        if (validInfo !== "" && imgCapturedMethod !== "NONE") {
             this.setState({
                 showErrorMessage: false
             });
@@ -185,16 +215,16 @@ class CreateVisitorComponent extends Component {
                 "name": document.getElementById("EmpName").value,
                 "gender": genderSelected,
                 "imgBase64": dataUrl,
-                "dob": document.getElementById("EmpDOB").value,
                 "phone": document.getElementById("EmpPhone").value,
                 "email": document.getElementById("EmpEmailID").value,
-                "department": document.getElementById("EmpJoiningDepartment").value,
-                "misc": document.getElementById("EmpReportingTo").value,
+                "whomToMeet": document.getElementById("whomToMeet").value,
+                "purpose": document.getElementById("visitorPurpose").value,
+                "document":document.getElementById("identificationDoc").value,
                 "picurl": null,
                 "picname": null,
                 "pictemplate": null
             }
-            AppService.postCreateUser(propsToBeSent, this.onEmployeeCreationSuccessHandler)
+            AppService.postCreateVisitor(propsToBeSent, this.onEmployeeCreationSuccessHandler)
 
         } else {
             this.setState({
@@ -220,7 +250,7 @@ class CreateVisitorComponent extends Component {
 
         return (
             <div>
-                <span className="pageHeaderTxt">Add Employee details</span>
+                <span className="pageHeaderTxt">Add Visitor details</span>
                 <div>
                     {this.getErrorMessage()}
                 </div>
@@ -239,17 +269,12 @@ class CreateVisitorComponent extends Component {
                     </div>
                     <div className="form-row">
                         <div className="form-group col-lg-4 col-md-6">
-                            <label htmlFor="EmpDOB">DOB</label>
-                            <input className="form-control form-control-sm" id="EmpDOB" type="text" />
-
+                            <label htmlFor="visitorPurpose">Purpose</label>
+                            <input type="text" className="form-control form-control-sm" id="visitorPurpose" placeholder="state purpose " />
                         </div>
                         <div className="form-group col-lg-4 col-md-6">
-                            <label htmlFor="EmpReportingTo">Misc</label>
-                            <input type="text" className="form-control form-control-sm" id="EmpReportingTo" placeholder="Reporting To" />
-                        </div>
-                        <div className="form-group col-lg-4 col-md-6">
-                            <label htmlFor="EmpJoiningDepartment">Department</label>
-                            <input type="text" className="form-control form-control-sm" id="EmpJoiningDepartment" placeholder="Joining Department" />
+                            <label htmlFor="whomToMeet">Whom to Meet</label>
+                            <input type="text" className="form-control form-control-sm" id="whomToMeet" placeholder="state the focal" />
                         </div>
                     </div>
                     <div className="form-row">
@@ -261,16 +286,23 @@ class CreateVisitorComponent extends Component {
                             <label htmlFor="EmpPhone">Phone</label>
                             <input type="number" className="form-control form-control-sm" id="EmpPhone" placeholder="Phone" />
                         </div>
-                        <div className="form-group col-lg-4 col-md-6">
-                            <label htmlFor="EmpGender">Gender</label>
-                            <div className="form-check">
-                                <input className="form-check-input" type="radio" name="gridRadios" id="male" value="male" />
-                                <label className="form-check-label mr-4" htmlFor="male">Male</label>
-
-                                <input className="form-check-input" type="radio" name="gridRadios" id="female" value="female" />
-                                <label className="form-check-label" htmlFor="female">Female</label>
-                            </div>
+                        
+                    </div>
+                    <div className="form-row">
+                    <div className="form-group col-lg-4 col-md-6">
+                            <label htmlFor="identificationDoc">Identification Docs</label>
+                            <input type="text" className="form-control form-control-sm" id="identificationDoc" placeholder="Driving License.." />
                         </div>
+                        <div className="form-group col-lg-4 col-md-6">
+                                <label htmlFor="EmpGender">Gender</label>
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio" name="gridRadios" id="male" value="male" />
+                                    <label className="form-check-label mr-4" htmlFor="male">Male</label>
+
+                                    <input className="form-check-input" type="radio" name="gridRadios" id="female" value="female" />
+                                    <label className="form-check-label" htmlFor="female">Female</label>
+                                </div>
+                            </div>
                     </div>
                     <div className="form-row">
                         {this.webCamDOMElement()}

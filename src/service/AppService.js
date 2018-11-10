@@ -4,10 +4,11 @@ import empCreation from './mocks/empCreation';
 import attendanceList from './mocks/attendanceList';
 import attendanceListSingle from './mocks/attendanceListSingle';
 import loginResponse from './mocks/loginResponse';
+import visitorCreated from './mocks/createVisitor';
 
 class AppService {
 	static SERVER_HOST = 'https://reqres.in/api/';//192.168.0.9
-	static USE_MOCK = true;
+	static USE_MOCK = false;
 
 	static failureHandler(error) {
 		console.log(error);
@@ -137,6 +138,24 @@ class AppService {
 		 }
 
 	}
+
+
+	static postCreateVisitor(data, successHandler, failureHandler = this.failureHandler) {
+		if(this.USE_MOCK) {
+			successHandler(visitorCreated);
+		}
+		 else {
+			axios.post(AppService.getServerURL() + 'user', data)
+			.then(function (response) {
+				successHandler(response.data);
+			})
+			.catch(function (error) {
+				failureHandler(error);
+			});
+		 }
+
+	}
+
 
 	static getEmployeesById(data, successHandler, failureHandler = this.failureHandler) {
 		if(this.USE_MOCK) {

@@ -49,10 +49,13 @@ class CreateUserComponent extends Component {
         return null;
     }
     takeSnap() {
+        this.setState({
+            imgCapturedMethod: 'SNAP_CLICKED'
+        });
         const canvas = document.getElementById('canvasComponent');
         const context = canvas.getContext('2d');
         const videoEle = document.getElementById('videoCaptureComponent');
-        context.drawImage(videoEle, 0, 0, 640, 480);
+        context.drawImage(videoEle, 0, 0,canvas.width, canvas.height);
         videoEle.pause();
     }
 
@@ -77,9 +80,13 @@ class CreateUserComponent extends Component {
     encodeImageFileAsURL(element) {
         const file = element.files[0];
         const reader = new FileReader();
+        this.setState({
+            imgCapturedMethod: 'SNAP_UPLOADED'
+        });
         reader.onloadend = function () {
             window.imgBase64Local = reader.result;
-            console.log('RESULT', reader.result)
+            
+            
         }
         reader.readAsDataURL(file);
     }
@@ -94,16 +101,16 @@ class CreateUserComponent extends Component {
     }
 
     onEmployeeCreationSuccessHandler(resp) {
-        this.props.onEmployeeCreationSuccess(resp);
+        this.resetInputFields();
         this.setState({
             showInfoMessage: true
         });
-        this.resetInputFields();
+        
     }
 
 
     getInfoMessage() {
-        if (this.state && this.state.showErrorMessage) {
+        if (this.state && this.state.showInfoMessage) {
             return (
                 <div className="noDataContent alert alert-info">
                     Employee Created Successfully
@@ -118,7 +125,7 @@ class CreateUserComponent extends Component {
     getErrorMessage() {
         if (this.state && this.state.showErrorMessage) {
             return (
-                <div className="noDataContent alert alert-error">
+                <div className="noDataContent alert alert-info">
                     please fill the manadatory params
 
                 </div>
@@ -147,6 +154,19 @@ class CreateUserComponent extends Component {
         document.getElementById("EmpEmailID").value = "";
         document.getElementById("EmpJoiningDepartment").value = "";
         document.getElementById("EmpReportingTo").value = "";
+const videoEle = document.getElementById('videoCaptureComponent');
+        const canvas = document.getElementById('canvasComponent');
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        videoEle.src ="";
+        this.setState({
+            imgCapturedMethod: 'NONE'
+        });
+    }
+ componentWillMount() {
+        this.setState({
+            imgCapturedMethod: 'NONE'
+        });
     }
 
     componentWillUnmount() {
