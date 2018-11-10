@@ -125,6 +125,10 @@ class ViewVisitorListComponent extends Component {
                 <td>{trackedDate}</td>
                 <td>{singleVisitor.name}</td>
                 <td>{singleVisitor.visitorID}</td>
+                <td>{singleVisitor.purpose}</td>
+                <td>{singleVisitor.whomToMeet}</td>
+                <td>{singleVisitor.documents}</td>
+
                 <td>{singleVisitor.in_time}</td>
                 <td>{singleVisitor.out_time}</td>
                 <td>{singleVisitor.total_time}</td>
@@ -234,8 +238,11 @@ class ViewVisitorListComponent extends Component {
                 <th scope="col">Date</th>
                 <th scope="col">Name</th>
                 <th scope="col">Visitor ID</th>
-                <th scope="col">First In</th>
-                <th scope="col">Last Out</th>
+                <th scope="col">Purpose</th>
+                <th scope="col">Whom To Meet</th>
+                <th scope="col">Documents</th>
+                <th scope="col">In Time</th>
+                <th scope="col">Out Time</th>
                 <th scope="col">Total Time</th>
               </tr>
             </thead>

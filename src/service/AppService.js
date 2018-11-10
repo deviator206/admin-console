@@ -6,6 +6,7 @@ import attendanceListSingle from './mocks/attendanceListSingle';
 import loginResponse from './mocks/loginResponse';
 import visitorCreated from './mocks/createVisitor';
 import visitorList from './mocks/visitorList';
+import notificationList from './mocks/notificationList';
 
 class AppService {
 	static SERVER_HOST = 'https://reqres.in/api/';//192.168.0.9
@@ -229,8 +230,73 @@ class AppService {
 				failureHandler(error);
 			});
 		}
-		
 	}
+
+
+
+	
+	static getNotificationForRange(data, successHandler, failureHandler = this.failureHandler) {
+		if(this.USE_MOCK) {
+			successHandler(notificationList);
+		} else {
+			axios.get(AppService.getServerURL() + 'notification/fromto?from='+data.startDate+'&to='+data.endDate)
+			.then(function (response) {
+				successHandler(response.data);
+			})
+			.catch(function (error) {
+				failureHandler(error);
+			});
+		}
+	}
+
+	static getNotificationForSpecificDate(data, successHandler, failureHandler = this.failureHandler) {
+		if(this.USE_MOCK) {
+			successHandler(notificationList);
+		} else {
+			axios.get(AppService.getServerURL() + 'notification/fordate/'+data.specificDate)
+			.then(function (response) {
+				successHandler(response.data);
+			})
+			.catch(function (error) {
+				failureHandler(error);
+			});
+		}
+	}
+
+	static getNotificationForMonth(data, successHandler, failureHandler = this.failureHandler) {
+		if(this.USE_MOCK) {
+			successHandler(notificationList);
+		}
+		else {
+			axios.get(AppService.getServerURL() + 'notification/formonth/'+data.month)
+			.then(function (response) {
+				successHandler(response.data);
+			})
+			.catch(function (error) {
+				failureHandler(error);
+			});
+		}
+	}
+
+
+
+	static postLogout(data, successHandler, failureHandler = this.failureHandler) {
+		if(this.USE_MOCK) {
+			successHandler(notificationList);
+		}
+		else {
+			axios.get(AppService.getServerURL() + 'notification/formonth/'+data.month)
+			.then(function (response) {
+				successHandler(response.data);
+			})
+			.catch(function (error) {
+				failureHandler(error);
+			});
+		}
+	}
+
+
+	
 
 	
 

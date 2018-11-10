@@ -7,6 +7,7 @@ import ViewNotificationComponent from './ViewNotificationComponent';
 import ViewEmployeeListComponent from './ViewEmployeeListComponent';
 import ViewAttendanceSingleComponent from './ViewAttendanceSingleComponent';
 import ViewVisitorListComponent from './ViewVisitorListComponent';
+import AppService from '../service/AppService';
 
 
 class DashboardComponent extends Component {
@@ -17,6 +18,7 @@ class DashboardComponent extends Component {
         this.sideMenuClick = this.sideMenuClick.bind(this);
         this.getMainContent = this.getMainContent.bind(this);
         this.getDashboardContent = this.getDashboardContent.bind(this);
+        this.onLogoutSuccess = this.onLogoutSuccess.bind();
     }
     componentWillMount() {
         this.setState({
@@ -54,8 +56,20 @@ class DashboardComponent extends Component {
         return compReturned;
     }
 
-    signOutHandler() {
+    onLogoutSuccess() {
+        this.props.onLogoutSuccess();
         this.props.history.push("/")
+    }
+    signOutHandler() {
+        this.props.onLogoutSuccess();
+        this.props.history.push("/")
+        /*
+        AppService.postLogout({
+            startDate: document.getElementById("rangeSearchStartDate").value,
+            endDate: document.getElementById("rangeSearchEndDate").value
+          }, this.onLogoutSuccess)
+          */
+        
     }
 
     sideMenuClick(menuItem) {

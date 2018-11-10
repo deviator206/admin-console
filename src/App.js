@@ -58,7 +58,11 @@ const mapDispatchToProps = dispatch => {
     },
     onEmployeeCreationSuccess : respo => {
       dispatch({type:ActionType.USER_CREATED, payload:{...respo}})
+    },
+    onLogoutSuccess : respo => {
+      dispatch({type:ActionType.LOGOUT_SUCCESS})
     }
+
   }
 }
 

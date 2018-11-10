@@ -23,6 +23,9 @@ const visitorList = [{
         "in_time": "9:00pm",
         "out_time": "",
         "total_time":"9hrs",
+        "purpose":"this was the purpose",
+        "whomToMeet":"this was the purpose",
+        "documents":"",
         "pic_url": "anonymous01.png"
     },
     {
@@ -33,6 +36,9 @@ const visitorList = [{
         "in_time": "9:00pm",
         "out_time": "5:00pm",
         "total_time":"5hrs",
+        "purpose":"this was the purpose",
+        "whomToMeet":"this was the purpose",
+        "documents":"Passport",
         "pic_url": "anonymous01.png"
     },{
         "id":3,
@@ -42,6 +48,9 @@ const visitorList = [{
         "in_time": "9:00pm",
         "out_time": "",
         "total_time":"",
+        "purpose":"this was the purpose",
+        "whomToMeet":"this was the purpose",
+        "documents":"DL",
         "pic_url": "anonymous01.png"
     }];
 
