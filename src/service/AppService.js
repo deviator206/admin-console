@@ -5,10 +5,11 @@ import attendanceList from './mocks/attendanceList';
 import attendanceListSingle from './mocks/attendanceListSingle';
 import loginResponse from './mocks/loginResponse';
 import visitorCreated from './mocks/createVisitor';
+import visitorList from './mocks/visitorList';
 
 class AppService {
 	static SERVER_HOST = 'https://reqres.in/api/';//192.168.0.9
-	static USE_MOCK = false;
+	static USE_MOCK = true;
 
 	static failureHandler(error) {
 		console.log(error);
@@ -186,6 +187,50 @@ class AppService {
 	}
 
 	
+
+	static getVisitorForRange(data, successHandler, failureHandler = this.failureHandler) {
+		if(this.USE_MOCK) {
+			successHandler(visitorList);
+		} else {
+			axios.get(AppService.getServerURL() + 'visitor/fromto?from='+data.startDate+'&to='+data.endDate)
+			.then(function (response) {
+				successHandler(response.data);
+			})
+			.catch(function (error) {
+				failureHandler(error);
+			});
+		}
+	}
+
+	static getVisitorForSpecificDate(data, successHandler, failureHandler = this.failureHandler) {
+		if(this.USE_MOCK) {
+			successHandler(visitorList);
+		} else {
+			axios.get(AppService.getServerURL() + 'visitor/fordate/'+data.specificDate)
+			.then(function (response) {
+				successHandler(response.data);
+			})
+			.catch(function (error) {
+				failureHandler(error);
+			});
+		}
+	}
+
+	static getVisitorForMonth(data, successHandler, failureHandler = this.failureHandler) {
+		if(this.USE_MOCK) {
+			successHandler(visitorList);
+		}
+		else {
+			axios.get(AppService.getServerURL() + 'visitor/formonth/'+data.month)
+			.then(function (response) {
+				successHandler(response.data);
+			})
+			.catch(function (error) {
+				failureHandler(error);
+			});
+		}
+		
+	}
 
 	
 
