@@ -9,8 +9,12 @@ import visitorList from './mocks/visitorList';
 import notificationList from './mocks/notificationList';
 
 class AppService {
-	static SERVER_HOST = 'https://reqres.in/api/';  // 'http://192.168.1.102:8080/'; // https://reqres.in/api/;
+	static SERVER_HOST = 'http://192.168.1.102:8080/';  // 'http://192.168.1.102:8080/'; // https://reqres.in/api/;
 	static USE_MOCK = true;
+
+	static getPushNotificationURL() {
+		return AppService.SERVER_HOST+'getPushNotification/';
+	}
 
 	static failureHandler(error) {
 		console.log(error);

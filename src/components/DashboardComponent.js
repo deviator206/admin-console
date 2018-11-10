@@ -19,10 +19,30 @@ class DashboardComponent extends Component {
         this.getMainContent = this.getMainContent.bind(this);
         this.getDashboardContent = this.getDashboardContent.bind(this);
         this.onLogoutSuccess = this.onLogoutSuccess.bind();
+        this.onPushNotificationRcvd = this.onPushNotificationRcvd.bind(this);
+    }
+
+    componentWillUnmount() {
+        if (this.evtSource) {
+            this.evtSource.close();
+        }
     }
     componentWillMount() {
+        const ranNo = Math.floor((Math.random() * 1000) + 1)
         this.setState({
-            selectedMenu: AppConstant.CREATE_USER
+            selectedMenu: AppConstant.CREATE_USER,
+            notification_counter:0,
+            sName:"S_"+ranNo
+        });
+        this.evtSource = new EventSource(AppService.getPushNotificationURL()+ranNo);
+        this.evtSource.addEventListener('message', this.onPushNotificationRcvd, false);
+    }
+
+    onPushNotificationRcvd (data) {
+        console.log(' PUSH NOTIFICATION RCVD');
+        const {notification_counter} = this.state;
+        this.setState({
+            notification_counter: notification_counter+1
         });
     }
 
@@ -114,7 +134,8 @@ class DashboardComponent extends Component {
     }
 
     getDashboardContent(ctxInfo) {
-        const { authenticated = true } = this.props;
+        const { authenticated = true, logged_in_user } = this.props;
+        const {notification_counter = 0} = this.state
         if (authenticated) {
             return <div className="wrapper">
                 <nav id="sidebar">
@@ -128,7 +149,7 @@ class DashboardComponent extends Component {
                         <li className={this.state && this.state.selectedMenu === AppConstant.ATTENDANCE_SINGLE ? 'active' : ''}  ><a onClick={() => { this.sideMenuClick(AppConstant.ATTENDANCE_SINGLE) }}>Attendance - Single </a></li>
                         <li className={this.state && this.state.selectedMenu === AppConstant.CREATE_VISITOR ? 'active' : ''}  ><a onClick={() => { this.sideMenuClick(AppConstant.CREATE_VISITOR) }}>Create Visitor </a></li>
                         <li className={this.state && this.state.selectedMenu === AppConstant.VIEW_VISITOR ? 'active' : ''}  ><a onClick={() => { this.sideMenuClick(AppConstant.VIEW_VISITOR) }}>View All Visitor </a></li>
-                        <li className={this.state && this.state.selectedMenu === AppConstant.VIEW_NOTIFICATION ? 'active' : ''}  ><a onClick={() => { this.sideMenuClick(AppConstant.VIEW_NOTIFICATION) }}>Notification</a></li>
+                        <li className={this.state && this.state.selectedMenu === AppConstant.VIEW_NOTIFICATION ? 'active' : ''}  ><a onClick={() => { this.sideMenuClick(AppConstant.VIEW_NOTIFICATION) }}>Notification {this.state.notification_counter}</a></li>
                     </ul>
                 </nav>
                 <div id="content">
@@ -139,7 +160,7 @@ class DashboardComponent extends Component {
                                 <span></span>
                             </button>
                             <div className="headerActionMenu">
-                                <div>Welcome User!</div>
+                                <div>Welcome {this.state.sName} {logged_in_user && logged_in_user.username && (logged_in_user.username).toUpperCase()} ! </div>
                                 <div><a className="nav-link" onClick={this.signOutHandler}>Logout</a></div>
                             </div>
                         </div>
