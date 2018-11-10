@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import AppService from '../service/AppService';
+import NotificationItemComponent from './NotificationItemComponent';
+import Modal from './Modal';
+import CreateUserComponent from './CreateUserComponent';
+import CreateVisitorComponent from './CreateVisitorComponent';
+
 
 class ViewNotificationComponent extends Component {
 
@@ -16,6 +21,15 @@ class ViewNotificationComponent extends Component {
     this.renderEmptyNotificationList = this.renderEmptyNotificationList.bind(this);
     this.renderNotificationList = this.renderNotificationList.bind(this);
     this.onResetClickedHandler = this.onResetClickedHandler.bind(this);
+
+    this.onVisitorConversionHandler = this.onVisitorConversionHandler.bind(this);
+    this.onEmployeeConversionHandler = this.onEmployeeConversionHandler.bind(this);
+    this.renderModalForEmpConversion = this.renderModalForEmpConversion.bind(this);
+    this.renderModalForVisitorConversion = this.renderModalForVisitorConversion.bind(this);
+    this.hideModal = this.hideModal.bind(this);
+    this.visitorCreationComplete = this.visitorCreationComplete.bind(this);
+    this.employeeCreationComplete = this.employeeCreationComplete.bind(this);
+
   }
 
   componentWillMount() {
@@ -95,9 +109,13 @@ class ViewNotificationComponent extends Component {
   onSearchComplete(resp) {
     if (resp) {
       this.setState({
-        attendanceList: resp
+        attendanceList: resp,
+        'conversion': 'NONE',
+        'show_modal':false,
+        'notification_details':undefined
       });
     }
+    
   }
 
   renderEmptyNotificationList() {
@@ -113,47 +131,91 @@ class ViewNotificationComponent extends Component {
   }
 
 
+  onEmployeeConversionHandler (singleNotification) {
+    console.log("employee "+ singleNotification.id)
+    this.setState({
+      'conversion': 'EMP',
+      'show_modal':true,
+      'notification_details':singleNotification
+    })
+  }
+
+
+  visitorCreationComplete (notification_details) {
+    // REMOVE NOTIFICATION
+    AppService.deleteNotification(notification_details, this.employeeCreationComplete);
+    // FETCH NEW
+    
+  }
+
+
+  employeeCreationComplete () {
+    // REMOVE NOTIFICATION
+    this.onSearchClickedHandler()
+    // FETCH NEW
+  }
+
+
+  hideModal() {
+    this.setState({
+      'conversion': 'NONE',
+      'show_modal':false,
+      'notification_details':undefined
+    })
+  }
+
+  onVisitorConversionHandler (singleNotification) {
+    this.setState({
+      'conversion': 'VISIT',
+      'notification_details':singleNotification,
+      'show_modal':true
+    })
+    console.log("onVisitorConversionHandler "+ singleNotification.id)
+  }
+
+  renderModalForEmpConversion() {
+    const {conversion, notification_details, show_modal } = this.state
+    if (conversion == 'EMP') {
+      return (
+          <Modal 
+            show={show_modal}
+            handleClose={this.hideModal} >
+            <CreateUserComponent notification_details ={notification_details} onCreationComplete={this.visitorCreationComplete} ></CreateUserComponent>
+          </Modal>
+
+      )
+    }
+    return null;
+  }
+
+
+  renderModalForVisitorConversion () {
+    const {conversion, notification_details, show_modal } = this.state
+    if (conversion == 'VISIT') {
+      return (
+          <Modal  show={show_modal}
+          handleClose={this.hideModal} >
+          <CreateVisitorComponent notification_details ={notification_details} onCreationComplete={this.visitorCreationComplete}></CreateVisitorComponent>
+          </Modal>
+
+      )
+    }
+    return null;
+  }
+
   renderNotificationList() {
     const { attendanceList = [] } = this.state;
     let renderableEmpAttList = [];
+    const onEmployeeConversion = this.onEmployeeConversionHandler;
+    const onVisitorConversion = this.onVisitorConversionHandler;
     renderableEmpAttList = attendanceList.map(function (singleVisitor) {
-      let trackedDate = "";
-      if (singleVisitor && singleVisitor.trackedDate) {
-        const dateIn = new Date(singleVisitor.trackedDate);
-        trackedDate = dateIn.getUTCDay() + '/' + dateIn.getUTCMonth() + '/' + dateIn.getUTCFullYear();
-      }
       return (
-        <tr key={singleVisitor.id}>
-
-          <td>{trackedDate}</td>
-          <td>{singleVisitor.type}</td>
-          <td>{singleVisitor.description}</td>
-          <td>
-            <img src={singleVisitor.pic_url} ></img>
-          </td>
-
-          <td>
-            <button
-              type="submit"
-              className="btn btn-sm btn-primary mb-2 mt-md-2 mt-sm-3"
-              onClick={() => {
-
-              }}> Add Employee </button>
-          </td>
-
-          <td>
-            <button
-              type="submit"
-              className="btn btn-sm btn-primary mb-2 mt-md-2 mt-sm-3"
-              onClick={() => {
-
-              }}> Add Visitor</button>
-          </td>
-
-
-
-          <td>{singleVisitor.total_time}</td>
-        </tr>
+        <NotificationItemComponent
+          key={singleVisitor.id}
+          singleNotification={singleVisitor}
+          onEmployeeConversion={onEmployeeConversion}
+          onVisitorConversion={onVisitorConversion}>
+        </NotificationItemComponent>
       )
     });
     return renderableEmpAttList;
@@ -275,7 +337,9 @@ class ViewNotificationComponent extends Component {
             </tbody>
           </table>
         </div>
-
+        {this.renderModalForEmpConversion()}
+        {this.renderModalForVisitorConversion()}
+        
         {this.renderEmptyNotificationList()}
       </div>
     );

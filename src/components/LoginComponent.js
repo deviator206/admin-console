@@ -20,14 +20,14 @@ class LoginComponent extends Component {
 
 
     onLoginSuccessCallback (response) {
+        
         this.props.onLoginSuccess(response);
         this.props.history.push("/dashboard")
     }
     onSubmitHandler() {
         AppService.invokeLogin({
             "username": document.getElementById("inputUserName").value,
-            "password": document.getElementById("inputPassword").value,
-            "role": "ADMIN"
+            "password": document.getElementById("inputPassword").value
         },
         this.onLoginSuccessCallback);
     }

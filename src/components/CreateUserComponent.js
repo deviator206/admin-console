@@ -101,10 +101,14 @@ class CreateUserComponent extends Component {
     }
 
     onEmployeeCreationSuccessHandler(resp) {
+        const {onCreationComplete, notification_details} = this.props;
         this.resetInputFields();
         this.setState({
             showInfoMessage: true
         });
+        if (notification_details && onCreationComplete) {
+            onCreationComplete(notification_details);
+        } 
         
     }
 

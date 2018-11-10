@@ -9,7 +9,7 @@ import visitorList from './mocks/visitorList';
 import notificationList from './mocks/notificationList';
 
 class AppService {
-	static SERVER_HOST = 'https://reqres.in/api/';//192.168.0.9
+	static SERVER_HOST = 'https://reqres.in/api/';  // 'http://192.168.1.102:8080/'; // https://reqres.in/api/;
 	static USE_MOCK = true;
 
 	static failureHandler(error) {
@@ -296,6 +296,21 @@ class AppService {
 	}
 
 
+
+	static deleteNotification(data, successHandler, failureHandler = this.failureHandler) {
+		if(this.USE_MOCK) {
+			successHandler(notificationList);
+		}
+		else {
+			axios.get(AppService.getServerURL() + 'notification/formonth/'+data.month)
+			.then(function (response) {
+				successHandler(response.data);
+			})
+			.catch(function (error) {
+				failureHandler(error);
+			});
+		}
+	}
 	
 
 	
